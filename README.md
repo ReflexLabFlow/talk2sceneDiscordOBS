@@ -49,5 +49,6 @@ Generate the OAuth2 invite URL and add the bot to your server.
 
 ### 5️⃣ Run the Bot
 ```bash
+cd obs-discord-voice-link
 npm install
 node index.js
