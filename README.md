@@ -3,102 +3,125 @@
 > A lightweight Node.js bridge between Discord voice chat and OBS – automatically triggers scene actions in OBS when users start or stop speaking.
 
 ## 🔹 Description
-**OBS Discord Voice Link** verbindet einen Discord-Voice-Channel mit OBS.  
-Wenn jemand zu sprechen beginnt oder aufhört, werden Nachrichten an den **Advanced Scene Switcher** in OBS gesendet, sodass Szenen oder Overlays automatisch gewechselt werden.  
-Ideal für Streamer, Podcasts oder Gruppen-Streams.
+**OBS Discord Voice Link** connects a Discord voice channel to OBS.  
+When someone starts or stops speaking, messages are sent to the **Advanced Scene Switcher** plugin in OBS, allowing automatic scene or overlay changes.  
+Perfect for remote group shows, podcasts, and streamers. Ideally combined with **VDO.Ninja (Video.Ninja)** for visual speaker switching.
+
+### 💡 Why this setup is efficient
+- 🎧 In this setup only **video streams** are handled through VDO.Ninja – **audio stays in Discord**, reducing total input bitrate.  
+- 🧠 Fewer active OBS sources = lower **CPU load** and smoother performance.  
+- ⚡ Switching logic is fully automated – no need for manual scene control.  
+
+**Note:** A small delay might occur between Discord speech audio and Video that comes with VDO.ninja, but it can easily be synchronized with OBS.
 
 ---
 
 ## 🛠️ Features
-- 🎙️ Erkennt, wann Nutzer in Discord sprechen oder aufhören
-- 🔌 Sendet Nachrichten an OBS via WebSocket
-- ♻️ Automatische Reconnect-Funktion bei OBS-Verbindungsabbruch
-- 💻 Einfache Einrichtung, keine tiefen Programmierkenntnisse nötig
+- 🎙️ Detects who is speaking in Discord  
+- 🔌 Sends WebSocket messages directly to OBS  
+- ♻️ Auto reconnect if OBS disconnects  
+- 💻 Simple setup, beginner-friendly  
+- 🎥 (Optional) Integrates with **VDO.Ninja** for video guest switching  
 
 ---
 
-## ⚡ Vorinstallation
-Bevor du startest, installiere die folgenden Programme:
+## ⚡ Prerequisites
+Make sure you have these installed:
 
-1. Git – für Repository-Klonen: https://git-scm.com/downloads
-2. Node.js + npm – für das Ausführen des Bots: https://nodejs.org (LTS-Version empfohlen)
-3. OBS Studio – mindestens Version 29+: https://obsproject.com/de
-
-Optional: Python wird nur benötigt, falls OBS-Plugins Python-Skripte nutzen, für unseren Bot nicht zwingend erforderlich.
+1. **Git** – https://git-scm.com/downloads  
+2. **Node.js + npm** – https://nodejs.org (LTS recommended)  
+3. **OBS Studio** – version 29 or higher: https://obsproject.com/  
 
 ---
 
 ## ⚡ Setup Instructions
 
 ### 1️⃣ Clone the Repository
-Öffne ein Terminal oder die Eingabeaufforderung und führe aus:
+Open your terminal or command prompt:
 
 git clone https://github.com/ReflexLabFlow/talk2sceneDiscordOBS.git
 
-Standardmäßig landet das Repo hier:
+The project folder will usually be here:
 
 C:\Users\YourUsername\talk2sceneDiscordOBS\
 
-Dann ins Projektverzeichnis wechseln:
+Then go inside it:
 
 cd talk2sceneDiscordOBS
 
 ---
 
 ### 2️⃣ Create a Discord Bot
-1. Gehe zum Discord Developer Portal: https://discord.com/developers/applications
-2. Klicke Neue Anwendung → Name z. B. "OBS Voice Link"
-3. Im Menü links: Bot → Bot hinzufügen
-4. Kopiere den Token (wird in Schritt 4 eingefügt)
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)  
+2. Click **New Application** → name it (e.g., “OBS Voice Link”)  
+3. In the left menu: **Bot** → **Add Bot**  
+4. Copy the **Token** (you’ll use it later in `index.js`)
 
 ---
 
 ### 3️⃣ Set Required Bot Permissions
-- Scopes: bot
-- Bot-Berechtigungen:
-  - Connect
-  - Speak
-  - View Channels
-  - Read Messages/View Channels
-  - Use Voice Activity
+Under **OAuth2 → URL Generator**:
+- **Scopes:** `bot`
+- **Bot Permissions:**
+  - Connect  
+  - Speak  
+  - View Channels  
+  - Read Messages/View Channels  
+  - Use Voice Activity  
 
-OAuth2-URL generieren und den Bot zu deinem Server einladen.
+Generate the invite URL and add the bot to your Discord server.
 
 ---
 
 ### 4️⃣ Edit Configuration
-Öffne index.js und trage deine Daten ein:
+Open `index.js` and fill in your info:
 
-const token = "";      // Discord Bot Token
-
-const guildId = "";    // Server-ID
-
-const channelId = "";  // Voice-Channel-ID
-
-const serverPass = ""; // OBS WebSocket Passwort
+const token = "";      // Discord Bot Token  
+const guildId = "";    // Your Server ID  
+const channelId = "";  // Voice Channel ID  
+const serverPass = ""; // OBS WebSocket password  
 
 ---
 
-### 5️⃣ OBS Setup (Deutsch)
-1. Öffne OBS → Werkzeuge → Erweiterter Szenenwechsler
-2. Installiere, falls nicht vorhanden, das Plugin Advanced Scene Switcher
-3. Konfiguriere eine WebSocket-Anfrage für den Bot:
-   - Add → WebSocket → Request
-   - Name z. B. DiscordBot
-   - Type: CallVendorRequest
-   - Vendor Name: AdvancedSceneSwitcher
-   - Request Type: AdvancedSceneSwitcherMessage
-   - Request Data: { "message": "START:discordUsername" }
-   - Dies sendet z. B. beim Starten des Sprechens eine Nachricht an den Szenenwechsler.
-4. Stelle sicher, dass WebSocket-Server aktiviert ist:
-   - Einstellungen → WebSocket-Server → Port 4455
-   - Passwort setzen → in index.js eintragen (serverPass)
+### 5️⃣ OBS Setup
+1. Open OBS → **Tools → Advanced Scene Switcher**  
+2. Inside Advanced Scene Switcher:
+   - Go to the **WebSocket** tab  
+   - Add → **Request**  
+   - Name: `DiscordBot`  
+   - Type: `CallVendorRequest`  
+   - Vendor Name: `AdvancedSceneSwitcher`  
+   - Request Type: `AdvancedSceneSwitcherMessage`  
+   - Request Data example: `{ "message": "START:discordUsername" }`  
+   This lets OBS react to the Discord user who started or stopped speaking.
+3. Enable the OBS WebSocket server:
+   - Settings → WebSocket Server → Enable  
+   - Port: 4455  
+   - Set a password → use the same in `serverPass` inside `index.js`
+
+---
+
+## 🎥 Best Use-Case: Integrate VDO.Ninja (Video.Ninja)
+If your Discord guests also appear via VDO.Ninja, you can use this bot to **switch to their corresponding video source in OBS** when they speak.
+
+**Example setup:**
+- Each remote guest joins through a dedicated VDO.Ninja link, e.g.:  
+  https://vdo.ninja/?view=Laura  
+  https://vdo.ninja/?view=Tobi  
+- In OBS, add each VDO.Ninja link as a separate Browser Source (e.g. `Guest_Laura`, `Guest_Tobi`).  
+- In Advanced Scene Switcher, create conditions like:
+  - If message = `START:Laura` → show source `Guest_Laura`
+  - If message = `START:Tobi` → show source `Guest_Tobi`
+  - If message = `END:Laura` → hide source `Guest_Laura`
+  - etc.
+
+This allows automatic on-screen video switching between your Discord speakers, using only their voice activity.
 
 ---
 
 ### 6️⃣ Install Dependencies & Run
 
-npm install
+npm install  
 node index.js
 
 ---
@@ -110,15 +133,16 @@ git pull origin main
 ---
 
 ## 💡 Security Note
-- Nie den Bot-Token öffentlich teilen!
-- Token gewährt vollen Zugriff auf deinen Bot. Bei Leaks sofort zurücksetzen.
+- Never share your **Discord Bot Token** publicly!  
+- If your token leaks, regenerate it immediately in the Developer Portal.
 
 ---
 
-## 💸 Donations
-Wenn dir das Projekt hilft, unterstütze mich gerne: https://buymeacoffee.com/ReflexLabFlow
+## 💸 Support the Project
+If this tool helps you, support development here:  
+https://buymeacoffee.com/ReflexLabFlow
 
 ---
 
 ## 📄 License
-MIT License – siehe LICENSE
+MIT License – see LICENSE file for details.
