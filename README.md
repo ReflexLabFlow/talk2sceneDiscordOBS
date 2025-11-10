@@ -116,7 +116,7 @@ git pull origin main
 ---
 
 ## 💸 Donations
-Wenn dir das Projekt hilft, unterstütze mich gerne: buymeacoffee.com/ReflexLabFlow
+Wenn dir das Projekt hilft, unterstütze mich gerne: https://buymeacoffee.com/ReflexLabFlow
 
 ---
 
