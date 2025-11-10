@@ -19,36 +19,112 @@ Perfect for streamers, podcasts, or group discussions.
 
 ## ⚡ Setup Instructions
 
-### 1️⃣ Create a Discord Bot
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click **New Application**, name it (e.g., "OBS Voice Link")
-3. In the left menu, go to **Bot** → **Add Bot**
-4. Copy the **Token** → paste it into `token` in `index.js`  
 
-### 2️⃣ Set Required Bot Permissions
-- Scopes: `bot`
-- Bot Permissions:
-  - Connect
-  - Speak
-  - View Channels
-  - Read Messages/View Channels
-  - Use Voice Activity  
-Generate the OAuth2 invite URL and add the bot to your server.
+## ⚡ Vorinstallation
+Bevor du startest, installiere die folgenden Programme:
 
-### 3️⃣ Get IDs
-- Enable Developer Mode in Discord (Settings → Advanced)
-- Right-click your server → **Copy Server ID**
-- Right-click the voice channel → **Copy Channel ID**
-- Paste both into `guildId` and `channelId` in `index.js`
+1. **Git** – für Repository-Klonen  
+   [https://git-scm.com/downloads](https://git-scm.com/downloads)  
 
-### 4️⃣ OBS Setup
-- Open OBS → Settings → **WebSocket Server Settings**
-- Enable WebSocket server (default: `ws://localhost:4455`)
-- Set a password → paste it into `serverPass` in `index.js`
-- Install **Advanced Scene Switcher** plugin
+2. **Node.js + npm** – für das Ausführen des Bots  
+   [https://nodejs.org](https://nodejs.org) (empfohlen LTS-Version)  
 
-### 5️⃣ Run the Bot
-```bash
-cd obs-discord-voice-link
+3. **OBS Studio** – mindestens Version 29+  
+   [https://obsproject.com/de](https://obsproject.com/de)  
+
+Optional: **Python** wird nur benötigt, falls OBS-Plugins Python-Skripte nutzen, für unseren Bot nicht zwingend erforderlich.
+
+---
+
+## ⚡ Setup Instructions
+
+### 1️⃣ Clone the Repository
+Öffne ein Terminal oder die Eingabeaufforderung und führe aus:
+
+
+git clone https://github.com/ReflexLabFlow/talk2sceneDiscordOBS.git
+Standardmäßig landet das Repo hier:
+
+makefile
+Code kopieren
+C:\Users\YourUsername\talk2sceneDiscordOBS\
+Dann ins Projektverzeichnis wechseln:
+
+bash
+Code kopieren
+cd talk2sceneDiscordOBS
+2️⃣ Create a Discord Bot
+Gehe zum Discord Developer Portal
+
+Klicke Neue Anwendung → Name z. B. "OBS Voice Link"
+
+Im Menü links: Bot → Bot hinzufügen
+
+Kopiere den Token (wird in Schritt 4 eingefügt)
+
+3️⃣ Set Required Bot Permissions
+Scopes: bot
+
+Bot-Berechtigungen:
+
+Connect
+
+Speak
+
+View Channels
+
+Read Messages/View Channels
+
+Use Voice Activity
+
+OAuth2-URL generieren und den Bot zu deinem Server einladen.
+
+4️⃣ Edit Configuration
+Öffne index.js und trage deine Daten ein:
+
+js
+Code kopieren
+const token = "";      // Discord Bot Token
+const guildId = "";    // Server-ID
+const channelId = "";  // Voice-Channel-ID
+const serverPass = ""; // OBS WebSocket-Passwort
+5️⃣ OBS Setup (Deutsch)
+Öffne OBS → Werkzeuge → Erweiterter Szenenwechsler
+
+Installiere, falls nicht vorhanden, das Plugin Advanced Scene Switcher
+
+Konfiguriere eine WebSocket-Anfrage für den Bot:
+
+Gehe auf Add → WebSocket → Request
+
+Name z. B. DiscordBot
+
+Type: CallVendorRequest
+
+Vendor Name: AdvancedSceneSwitcher
+
+Request Type: AdvancedSceneSwitcherMessage
+
+Request Data: { "message": "START:discordUsername" }
+
+Dies sendet z. B. beim Starten des Sprechens eine Nachricht an den Szenenwechsler.
+
+Stelle sicher, dass WebSocket-Server aktiviert ist:
+
+Einstellungen → WebSocket-Server → Port 4455
+
+Passwort setzen → in index.js eintragen (serverPass)
+
+6️⃣ Install Dependencies & Run
+bash
+Code kopieren
 npm install
 node index.js
+7️⃣ Update Later
+bash
+Code kopieren
+git pull origin main
+💡 Security Note
+Nie den Bot-Token öffentlich teilen!
+
+Er gewährt vollen Zugriff auf deinen Bot. Bei Leaks sofort zurücksetze
