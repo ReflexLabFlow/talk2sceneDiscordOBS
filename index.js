@@ -1,21 +1,13 @@
 /**
- * 🎧 Discord → OBS Connector
+ * 🎧 OBS Discord Voice Link
  * Public Distribution Version (GitHub-Ready)
  * Author: ReflexLabFlow / Johannes Glaw
- * 🧩 Description:
- * This script connects a Discord voice channel to OBS.
- * When someone starts/stops speaking, it sends messages
- * to OBS Advanced Scene Switcher via WebSocket.
- * ℹ️ See README.md for full setup instructions and required permissions
  *
- * 💡 Example Use:
- * Auto-switch OBS scenes depending on who speaks in Discord.
+ * ℹ️ See README.md for full setup instructions, permissions, and OBS configuration
  *
- * ────────────────────────────────────────────────
  * ⚠️ Security Note:
- * Never share your Token publicly!
- * It grants full access to your bot. If leaked, reset it immediately.
- * ────────────────────────────────────────────────
+ * Never share your Bot Token publicly!
+ * It grants full access to your bot. Reset immediately if leaked.
  */
 
 import { Client, GatewayIntentBits } from "discord.js";
@@ -25,9 +17,9 @@ import { v4 as uuidv4 } from "uuid";
 
 // ========== CONFIGURATION ==========
 const token = "";         // 🔑 Your Discord Bot Token
-const guildId = "";        // 🏠 Your Discord Server ID
-const channelId = "";      // 🔊 Voice Channel ID
-const serverPass = "";     // 🔐 OBS WebSocket Password (from OBS settings)
+const guildId = "";       // 🏠 Your Discord Server ID
+const channelId = "";     // 🔊 Voice Channel ID
+const serverPass = "";    // 🔐 OBS WebSocket Password
 // ===================================
 
 const client = new Client({
@@ -49,7 +41,6 @@ async function connectOBS() {
       await obs.connect("ws://localhost:4455", serverPass);
       console.log("✅ Connected to OBS");
 
-      // Auto-reconnect if OBS disconnects
       obs.on("ConnectionClosed", async () => {
         console.warn("⚠️ OBS connection lost, reconnecting...");
         await wait(5000);
