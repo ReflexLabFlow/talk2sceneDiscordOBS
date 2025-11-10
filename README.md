@@ -70,8 +70,11 @@ OAuth2-URL generieren und den Bot zu deinem Server einladen.
 Öffne index.js und trage deine Daten ein:
 
 const token = "";      // Discord Bot Token
+
 const guildId = "";    // Server-ID
+
 const channelId = "";  // Voice-Channel-ID
+
 const serverPass = ""; // OBS WebSocket Passwort
 
 ---
