@@ -139,7 +139,7 @@ git pull origin main
 ---
 
 ## 💸 Support the Project
-If this tool helps you, support development here:  
+If this helps you, you can support the development with a small tip
 https://buymeacoffee.com/ReflexLabFlow
 
 ---
